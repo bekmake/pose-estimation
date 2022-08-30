@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     Mat camMatrix = (Mat1d(3, 3) << 766.1088867187500, 0, 313.9585628047498, 0, 769.9354248046875, 250.3607131410900, 0, 0, 1);
     Mat distCoeffs = (Mat1d(1, 5) << 0., 0., 0., 0., 0.);
 
-    LoadDetectAprilTag(ImagePath, image, dictionary, corners, ids);
+    loadDetectAprilTag(ImagePath, image, dictionary, corners, ids);
 
     if (ids.size() > 0)
     {
@@ -84,12 +84,7 @@ int main(int argc, char **argv)
         findProjectionMatrix(camMatrix, H, projectionMatrix);
         Mat pt1Cube, pt2Cube, pt3Cube, pt4Cube;
         projectCubePoints(projectionMatrix, pt1Cube, pt2Cube, pt3Cube, pt4Cube);
-        Point p1 = pt1Cube, p2 = pt2Cube, p3 = pt3Cube, p4 = pt4Cube;
-        line(image, p1, p2, Scalar(0, 255, 0), 2, LINE_8);
-        line(image, p2, p3, Scalar(0, 255, 0), 2, LINE_8);
-        line(image, p3, p4, Scalar(0, 255, 0), 2, LINE_8);
-        line(image, p4, p1, Scalar(0, 255, 0), 2, LINE_8);
-
+        drawCube(image, pt1Cube, pt2Cube, pt3Cube, pt4Cube);
 
         for (int j = 0; j < rvecs.size(); ++j)
         {
