@@ -1,16 +1,24 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(pose-estimation VERSION 0.1.0)
+project(Pose-Estimation VERSION 0.1.0)
 
-include(CTest)
-enable_testing()
+set (PROJECT_VERSION "0.1")
 
-find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
+# To build shared libraries in Windows, we set CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS to TRUE.
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-add_executable(pose-estimation pose-estimation.cpp)
+# Only do these if this is the main project, and not if it is included through add_subdirectory
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
-target_link_libraries(pose-estimation ${OpenCV_LIBS})
+  # Let's ensure -std=c++xx instead of -std=g++xx
+  #set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
+  # Let's nicely support folders in IDEs
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+
+endif()
+
+# The executable code is here
+add_subdirectory(apps)
+
+# Adding Library PARENT_DIRECTORY
