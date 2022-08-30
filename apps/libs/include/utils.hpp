@@ -5,3 +5,4 @@ using namespace cv;
 using namespace std;
 
 void LoadDetectAprilTag(String ImagePath, Mat &image,Ptr<aruco::Dictionary> &dictionary,vector<vector<Point2f>> &corners,vector<int> &ids );
+void crossProduct(Mat& r1, Mat& r2, Mat& r3);
