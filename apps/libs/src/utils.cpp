@@ -4,7 +4,8 @@
 #include <utils.hpp>
 using namespace cv;
 using namespace std;
-void LoadDetectAprilTag(String ImagePath, Mat &image,Ptr<aruco::Dictionary> &dictionary,vector<vector<Point2f>> &corners,vector<int> &ids )
+
+void loadDetectAprilTag(String ImagePath, Mat &image, Ptr<aruco::Dictionary> &dictionary, vector<vector<Point2f>> &corners, vector<int> &ids)
 {
 
     image = imread(ImagePath);
@@ -15,20 +16,29 @@ void LoadDetectAprilTag(String ImagePath, Mat &image,Ptr<aruco::Dictionary> &dic
     aruco::detectMarkers(image, dictionary, corners, ids);
 }
 
-void crossProduct(Mat& r1, Mat& r2, Mat& r3) {
-    double a1, a2, a3, b1, b2, b3;
-    a1 = r1.at<double>(0, 0);
-    a2 = r1.at<double>(1, 0);
-    a3 = r1.at<double>(2, 0);
-    b1 = r2.at<double>(0, 0);
-    b2 = r2.at<double>(1, 0);
-    b3 = r2.at<double>(2, 0);
+void crossProduct(Mat &a, Mat &b, Mat &c)
+{
+    c = (Mat1d(3, 1) << a.at<double>(1) * b.at<double>(2) - a.at<double>(2) * b.at<double>(1),
+         a.at<double>(2) * b.at<double>(0) - a.at<double>(0) * b.at<double>(2),
+         a.at<double>(0) * b.at<double>(1) - a.at<double>(1) * b.at<double>(0));
+}
 
-    double c1, c2, c3;
-    c1 = a2 * b3 - a3 * b2;
-    c2 = a3 * b1 - a1 * b3;
-    c3 = a1 * b2 - a2 * b1;
-    r3.push_back(c1);
-    r3.push_back(c2);
-    r3.push_back(c3);
+void iterateThroughFolder(String folderPath, vector<String> &imagePaths)
+{
+    String path = folderPath;
+    vector<String> fileNames;
+    glob(path, fileNames, false);
+    for (size_t i = 0; i < fileNames.size(); i++)
+    {
+        imagePaths.push_back(fileNames[i]);
+    }
+}
+
+void drawCube(Mat &image, Mat &pt1Cube, Mat &pt2Cube, Mat &pt3Cube, Mat &pt4Cube)
+{
+    Point p1 = pt1Cube, p2 = pt2Cube, p3 = pt3Cube, p4 = pt4Cube;
+    line(image, p1, p2, Scalar(0, 255, 0), 2);
+    line(image, p2, p3, Scalar(0, 255, 0), 2);
+    line(image, p3, p4, Scalar(0, 255, 0), 2);
+    line(image, p4, p1, Scalar(0, 255, 0), 2);
 }
