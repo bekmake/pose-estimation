@@ -34,6 +34,13 @@ void iterateThroughFolder(String folderPath, vector<String> &imagePaths)
     }
 }
 
+void horizontallyConcatThreeMat(Mat &A, Mat &B, Mat &C, Mat &D, Mat &E)
+{
+    hconcat(A, B, E);
+    hconcat(E, C, E);
+    hconcat(E, D, E);
+}
+
 void drawCube(Mat &image, Mat &pt1Cube, Mat &pt2Cube, Mat &pt3Cube, Mat &pt4Cube)
 {
     Point p1 = pt1Cube, p2 = pt2Cube, p3 = pt3Cube, p4 = pt4Cube;
