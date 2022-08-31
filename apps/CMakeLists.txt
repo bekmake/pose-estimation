@@ -28,6 +28,7 @@ target_compile_features(PoseEstimation PRIVATE cxx_std_17)
 #Ataching headers
 target_include_directories(PoseEstimation PRIVATE ./libs/include)
 target_sources(PoseEstimation PRIVATE ./libs/src/utils.cpp)
+target_sources(PoseEstimation PRIVATE ./libs/src/geometry.cpp)
 
 
 #set(CPACK_PROJECT_NAME ${PROJECT_NAME})
