@@ -13,10 +13,10 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 include(CTest)
 enable_testing()
 
-#Defining excutable file
+#Defining executable file
 add_executable(PoseEstimation PoseEstimation.cpp)
 
-#Ataching OpenCV Libraries
+#Attaching OpenCV Libraries
 target_link_libraries(PoseEstimation ${OpenCV_LIBS})
 
 #Make it C++17
@@ -25,7 +25,7 @@ target_compile_features(PoseEstimation PRIVATE cxx_std_17)
 
 #add_subdirectory(libs) 
 
-#Ataching headers
+#Attaching headers
 target_include_directories(PoseEstimation PRIVATE ./libs/include)
 target_sources(PoseEstimation PRIVATE ./libs/src/utils.cpp)
 target_sources(PoseEstimation PRIVATE ./libs/src/geometry.cpp)
