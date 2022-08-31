@@ -7,6 +7,14 @@
 using namespace cv;
 using namespace std;
 
+void readConfig(String &configPath, Mat &camMatrix, Mat &distCoeffs, Mat &squareCoords)
+{
+    FileStorage fs(configPath, FileStorage::READ);
+    fs["Camera_Matrix"] >> camMatrix;
+    fs["Distortion_Coefficients"] >> distCoeffs;
+    fs["Square_Coordinates"] >> squareCoords;
+}
+
 int main(int argc, char **argv)
 {
 
@@ -15,26 +23,20 @@ int main(int argc, char **argv)
     Ptr<aruco::Dictionary> dictionary;
     vector<vector<Point2f>> corners;
     vector<int> ids;
-    String ImagePath = "../../data/image001.jpg";
+    String imagePath = "../../data/image001.jpg";
+    String configPath = "../../apps/config.yml";
 
-    Mat camMatrix = (Mat1d(3, 3) << 766.1088867187500, 0, 313.9585628047498, 0, 769.9354248046875, 250.3607131410900, 0, 0, 1);
-    Mat distCoeffs = (Mat1d(1, 5) << 0., 0., 0., 0., 0.);
-
-    loadDetectAprilTag(ImagePath, image, dictionary, corners, ids);
+    Mat camMatrix, distCoeffs, squareCoords;
+    loadDetectAprilTag(imagePath, image, dictionary, corners, ids);
+    readConfig(configPath, camMatrix, distCoeffs, squareCoords);
 
     if (ids.size() > 0)
     {
 
-        vector<Vec3d> rvecs, tvecs;
-
-        aruco::estimatePoseSingleMarkers(corners, 0.05, camMatrix, distCoeffs, rvecs,
-                                         tvecs);
-
-        vector<vector<double>> squareCorners = {{0, 1}, {0, 0}, {1, 0}, {1, 1}};
         vector<Point2d> aprilTag;
-        for (size_t i = 0; i < squareCorners.size(); i++)
+        for (size_t i = 0; i < squareCoords.rows; i++)
         {
-            aprilTag.push_back(cv::Point2d((double)squareCorners[i][0], (double)squareCorners[i][1]));
+            aprilTag.push_back(cv::Point2d((double)squareCoords.at<double>(i, 0), (double)squareCoords.at<double>(i, 1)));
         }
         Mat H = findHomography(aprilTag, corners[0], RANSAC);
 
@@ -48,14 +50,6 @@ int main(int argc, char **argv)
         projectCubePoints(projectionMatrix, pt1Cube, pt2Cube, pt3Cube, pt4Cube);
         drawCube(image, pt1Cube, pt2Cube, pt3Cube, pt4Cube);
 
-        for (int j = 0; j < rvecs.size(); ++j)
-        {
-            auto rvec = rvecs[j];
-            auto tvec = tvecs[j];
-            cv::drawFrameAxes(image, camMatrix, distCoeffs, rvec, tvec, 0.02);
-            cout << "rvec 3:\n"
-                 << rvec << endl;
-        }
     }
 
     namedWindow("Display Image", WINDOW_AUTOSIZE);
