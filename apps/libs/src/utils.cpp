@@ -5,14 +5,12 @@
 using namespace cv;
 using namespace std;
 
-void loadDetectAprilTag(String ImagePath, Mat &image, Ptr<aruco::Dictionary> &dictionary, vector<vector<Point2f>> &corners, vector<int> &ids)
+void detectAprilTag(Mat &image, vector<vector<Point2f>> &corners, vector<int> &ids)
 {
-
-    image = imread(ImagePath);
-    // use all aruco types
-    // when corners size is greater than 1, start using this type
+    Ptr<aruco::Dictionary> dictionary;
+    // add all aruco types in dictionary and use them 
+    // when corners size is greater than 1, start using this type of aruco
     dictionary = aruco::getPredefinedDictionary(aruco::DICT_APRILTAG_36h11);
-
     aruco::detectMarkers(image, dictionary, corners, ids);
 }
 
